@@ -218,10 +218,6 @@ export default async function handler(req, res) {
             .replace(/\s+/g, ' ')
             .trim();
 
-        // Configurar email con headers optimizados para adjuntos
-        // Use the actual sending domain for Message-ID so it passes spam filters
-        const senderDomain = OVH_USER.split('@')[1] || 'correbars.cat';
-
         const mailOptions = {
             from: {
                 name: 'Correbars Esparreguera',
@@ -232,23 +228,8 @@ export default async function handler(req, res) {
             text: textContent,
             html: sanitizedHtml,
             attachments: emailAttachments,
-            // Headers optimizados para adjuntos
-            headers: {
-                'X-Mailer': 'Correbars Mailer v1.0',
-                'List-Unsubscribe': `<mailto:${OVH_USER}?subject=Unsubscribe>`,
-                'X-Priority': '3',
-                'X-MSMail-Priority': 'Normal',
-                'Importance': 'Normal',
-                'X-Auto-Response-Suppress': 'OOF, DR, RN, NRN, AutoReply',
-                // Headers específicos para adjuntos
-                'Content-Type': emailAttachments.length > 0 ? 'multipart/mixed' : 'multipart/alternative',
-                'MIME-Version': '1.0'
-            },
-            // Configuraciones adicionales
-            messageId: `<${Date.now()}.${Math.random().toString(36).substr(2, 9)}@${senderDomain}>`,
             date: new Date(),
             encoding: 'utf-8',
-            // Configuraciones específicas para adjuntos grandes
             disableFileAccess: true,
             disableUrlAccess: true
         };
