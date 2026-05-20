@@ -1,414 +1,728 @@
-
 <!DOCTYPE html>
 <html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Correbars 2025 - Confirmació de Preinscripció</title>
+    <title>Correbars 2026 – Confirmació Preinscripció</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600;700&family=Special+Elite&display=swap');
+
+        * { margin:0; padding:0; box-sizing:border-box; }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #0e1f0f;
+            background-image: radial-gradient(circle at 50% 0%, #1a3d1d 0%, #0e1f0f 60%);
+            padding: 28px 0 40px;
         }
 
-        .container {
-            max-width: 800px;
+        /* ── OUTER WRAPPER ── */
+        .wrapper {
+            max-width: 620px;
             margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .header {
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://i.postimg.cc/YS0NXVRX/unnamed.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            padding: 60px 20px;
+        /* ── HEADER IMAGE ── */
+        .header-img-wrap {
+            width: 100%;
+            line-height: 0;
+            border-radius: 6px 6px 0 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header-img-wrap img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* torn-paper bottom edge of header */
+        .tear-bottom {
+            width: 100%;
+            height: 22px;
+            background-color: #1a3d1d;
+            position: relative;
+        }
+        .tear-bottom::before {
+            content: '';
+            position: absolute;
+            top: -10px; left: 0; right: 0; height: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='12'%3E%3Cpath d='M0 12 Q5 0 10 8 Q15 16 20 4 Q25 -4 30 12 Z' fill='%231a3d1d'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            background-size: 30px 12px;
+        }
+
+        /* ── MAIN CARD ── */
+        .card {
+            background-color: #1a3d1d;
+            background-image:
+                    radial-gradient(circle at 90% 10%, rgba(212,224,20,0.04) 0%, transparent 50%),
+                    radial-gradient(circle at 10% 80%, rgba(0,0,0,0.3) 0%, transparent 50%);
+            border-left: 3px solid #2f6b35;
+            border-right: 3px solid #2f6b35;
+        }
+
+        /* ── WELCOME BANNER ── */
+        .welcome-band {
+            background-color: #d4e014;
+            padding: 22px 32px;
             text-align: center;
-            color: #fff;
-            min-height: 200px;
+            position: relative;
+        }
+
+        .welcome-band::before,
+        .welcome-band::after {
+            content: '✕';
+            font-family: 'Bebas Neue', Impact, sans-serif;
+            font-size: 18px;
+            color: rgba(0,0,0,0.25);
+            position: absolute;
+            top: 50%; transform: translateY(-50%);
+        }
+        .welcome-band::before { left: 16px; }
+        .welcome-band::after  { right: 16px; }
+
+        .welcome-band .greeting {
+            font-family: 'Bebas Neue', Impact, Arial Black, sans-serif;
+            font-size: 13px;
+            letter-spacing: 5px;
+            color: rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .welcome-band .name {
+            font-family: 'Bebas Neue', Impact, Arial Black, sans-serif;
+            font-size: 38px;
+            letter-spacing: 3px;
+            color: #0e1f0f;
+            line-height: 1;
+        }
+
+        .welcome-band .sub {
+            font-family: 'Special Elite', Georgia, serif;
+            font-size: 12px;
+            color: #4a6010;
+            margin-top: 4px;
+        }
+
+        /* ── BADGE ROW ── */
+        .badge-row {
+            background-color: #0e1f0f;
+            padding: 14px 32px;
             display: table;
             width: 100%;
         }
 
-        .header-content {
+        .badge-left {
             display: table-cell;
             vertical-align: middle;
         }
 
-        .header h1 {
+        .badge-left .label {
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #4a8a50;
+            margin-bottom: 2px;
+        }
+
+        .badge-left .reg-id {
+            font-family: 'Bebas Neue', Impact, Arial Black, sans-serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            color: #d4e014;
+        }
+
+        .badge-right {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: right;
+        }
+
+        .badge-right .anni {
+            font-family: 'Special Elite', Georgia, serif;
+            font-size: 11px;
+            color: #4a8a50;
+            line-height: 1.5;
+        }
+
+        .badge-right .anni strong {
+            color: #d4e014;
+            display: block;
+            font-family: 'Bebas Neue', Impact, Arial Black, sans-serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+
+        /* ── SECTION DIVIDER ── */
+        .divider {
+            height: 3px;
+            background: repeating-linear-gradient(
+                    90deg,
+                    #d4e014 0px, #d4e014 12px,
+                    transparent 12px, transparent 18px
+            );
+            margin: 0;
+        }
+
+        /* ── GENERIC SECTION ── */
+        .section {
+            padding: 26px 32px;
+            border-bottom: 1px solid #2f6b35;
+        }
+
+        .section-header {
+            display: table;
+            width: 100%;
+            margin-bottom: 18px;
+        }
+
+        .section-header-left {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', Impact, Arial Black, sans-serif;
+            font-size: 20px;
+            letter-spacing: 3px;
             color: #fff;
-            font-size: 2.2em;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            margin-bottom: 15px;
         }
 
-        .registration-id {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: #fff;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 2em;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        .section-line {
+            height: 2px;
+            background: linear-gradient(90deg, #d4e014 0%, transparent 100%);
+            margin-top: 4px;
+            width: 80px;
         }
 
-        .content {
-            padding: 30px;
-        }
-
-        .welcome-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .welcome-section h2 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .info-section {
-            margin: 25px 0;
-        }
-
-        .info-section h3 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.3em;
-        }
-
+        /* ── DATA TABLE ── */
         .info-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
 
-        .info-table tr {
-            border-bottom: 1px solid #eee;
-        }
+        .info-table tr { border-bottom: 1px solid #2a5a30; }
+        .info-table tr:last-child { border-bottom: none; }
 
         .info-table td {
-            padding: 12px 15px;
+            padding: 10px 0;
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 14px;
             vertical-align: top;
         }
 
         .info-table td:first-child {
-            background: #f8f9fa;
-            border-left: 4px solid #ff6b35;
-            font-weight: bold;
-            color: #333;
-            width: 40%;
+            color: #7ab880;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            width: 42%;
+            padding-right: 12px;
+            padding-top: 12px;
         }
 
         .info-table td:last-child {
-            color: #666;
-            font-size: 1.1em;
+            color: #e8f0e8;
+            font-weight: 400;
         }
 
-        .price-section {
-            background: linear-gradient(45deg, #11998e, #38ef7d);
+        /* ── INCLUDES GRID ── */
+        .includes-grid {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 8px;
+        }
+
+        .includes-cell {
+            background-color: #0e1f0f;
+            border: 1px solid #2f6b35;
+            padding: 14px 16px;
+            vertical-align: middle;
+            width: 50%;
+            border-radius: 2px;
+        }
+
+        .includes-cell .plus {
+            font-family: 'Bebas Neue', Impact, Arial Black, sans-serif;
+            font-size: 28px;
+            color: #d4e014;
+            line-height: 1;
+        }
+
+        .includes-cell .item-name {
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 700;
             color: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 25px 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .price-section h3 {
-            font-size: 1.3em;
+        .includes-cell .item-detail {
+            font-family: 'Special Elite', Georgia, serif;
+            font-size: 11px;
+            color: #7ab880;
+            margin-top: 2px;
+        }
+
+        /* ── PRICE SECTION ── */
+        .price-section {
+            background-color: #d4e014;
+            padding: 30px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-section::before {
+            content: 'CORREBARS 2026 CORREBARS 2026 CORREBARS 2026 CORREBARS';
+            position: absolute;
+            bottom: 6px; left: 0; right: 0;
+            font-family: 'Bebas Neue', Impact, sans-serif;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: rgba(0,0,0,0.12);
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .price-eyebrow {
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(0,0,0,0.45);
+            margin-bottom: 4px;
+        }
+
+        .price-amount {
+            font-family: 'Bebas Neue', Impact, Arial Black, sans-serif;
+            font-size: 96px;
+            line-height: 1;
+            color: #0e1f0f;
+            letter-spacing: 0px;
+        }
+
+        .price-amount sup {
+            font-size: 40px;
+            vertical-align: top;
+            margin-top: 14px;
+            display: inline-block;
+        }
+
+        .price-note {
+            font-family: 'Special Elite', Georgia, serif;
+            font-size: 12px;
+            color: rgba(0,0,0,0.5);
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        /* ── PAYMENT SECTION ── */
+        .payment-section {
+            padding: 26px 32px;
+            border-bottom: 1px solid #2f6b35;
+        }
+
+        .payment-location {
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #7ab880;
+            margin-bottom: 14px;
+        }
+
+        .dates-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .date-row td {
+            background-color: #0e1f0f;
+            padding: 14px 18px;
+            font-family: 'Oswald', Arial, sans-serif;
+            vertical-align: middle;
+        }
+
+        .date-row td:first-child {
+            border-left: 4px solid #d4e014;
+            border-radius: 2px 0 0 2px;
+            width: 28px;
+        }
+
+        .date-row td:first-child .day-icon {
+            font-size: 18px;
+        }
+
+        .date-row td:last-child {
+            border-radius: 0 2px 2px 0;
+        }
+
+        .date-row .day-name {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #d4e014;
+        }
+
+        .date-row .day-detail {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .date-row .day-time {
+            font-size: 12px;
+            color: #7ab880;
+            letter-spacing: 1px;
+        }
+
+        /* warning */
+        .warning {
+            margin-top: 16px;
+            background: linear-gradient(135deg, #2d0808 0%, #1a0505 100%);
+            border: 1px solid #7a1515;
+            border-left: 4px solid #e84040;
+            padding: 14px 16px;
+            border-radius: 2px;
+        }
+
+        .warning p {
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 13px;
+            color: #f0a0a0;
+            line-height: 1.55;
+            letter-spacing: 0.5px;
+        }
+
+        .warning strong { color: #ff7070; }
+
+        /* ── DJs ── */
+        .dj-section {
+            background-color: #0e1f0f;
+            padding: 24px 32px;
+            border-bottom: 1px solid #2f6b35;
+        }
+
+        .dj-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+        }
+
+        .dj-table tr { border-bottom: 1px solid #1a3d1d; }
+        .dj-table tr:last-child { border-bottom: none; }
+
+        .dj-table td {
+            padding: 12px 0;
+            vertical-align: middle;
+            font-family: 'Oswald', Arial, sans-serif;
+        }
+
+        .dj-slot {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #d4e014;
+            text-transform: uppercase;
+            width: 90px;
+        }
+
+        .dj-bar {
+            width: 3px;
+            background-color: #2f6b35;
+            padding: 0 !important;
+        }
+
+        .dj-name {
+            font-size: 22px;
+            font-family: 'Bebas Neue', Impact, Arial Black, sans-serif;
+            letter-spacing: 2px;
+            color: #fff;
+            padding-left: 16px !important;
+        }
+
+        /* ── LEGAL ── */
+        .legal {
+            background-color: #111e12;
+            padding: 24px 32px;
+            border-top: 3px solid #2f6b35;
+        }
+
+        .legal-title {
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #4a8a50;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a5a30;
+            margin-bottom: 14px;
+        }
+
+        .legal p {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            color: #4a7a50;
+            line-height: 1.65;
             margin-bottom: 10px;
         }
 
-        .price {
-            font-size: 2.5em;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .legal p strong { color: #7ab880; }
+
+        .legal ul {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            color: #4a7a50;
+            padding-left: 16px;
+            line-height: 1.8;
         }
 
-        .payment-info {
-            background: #fff3cd;
-            border: 2px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .payment-info h3 {
-            color: #856404;
-            margin-bottom: 15px;
-        }
-
-        .payment-dates {
-            background: #fff;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-
-        .payment-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .payment-list li {
-            background: #f8f9fa;
-            margin: 8px 0;
-            padding: 10px 15px;
-            border-radius: 5px;
-            border-left: 3px solid #ff6b35;
-        }
-
-        .warning {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-
-        .includes-section {
-            background: #d1ecf1;
-            border: 1px solid #bee5eb;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .includes-section h3 {
-            color: #0c5460;
-            margin-bottom: 15px;
-        }
-
-        .includes-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .includes-list li {
-            background: #fff;
-            margin: 8px 0;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border-left: 4px solid #17a2b8;
-        }
-
+        /* ── FOOTER ── */
         .footer {
-            background: #343a40;
-            color: #fff;
-            padding: 25px;
-            font-size: 0.85em;
-            line-height: 1.5;
-        }
-
-        .footer h4 {
-            color: #ffc107;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-
-        .footer p {
-            margin-bottom: 15px;
-            color: #ced4da;
-        }
-
-        .footer ul {
-            color: #ced4da;
-            padding-left: 20px;
-            margin: 10px 0;
-        }
-
-        .final-message {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: #fff;
-            padding: 20px;
+            background-color: #d4e014;
+            padding: 22px 32px;
             text-align: center;
-            font-size: 1.2em;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            border-radius: 0 0 6px 6px;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Fallback para clientes de correo que no soportan background-image */
-        .header-fallback {
-            background-color: #333;
-            display: none;
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: -10px; left: 0; right: 0; height: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='12'%3E%3Cpath d='M0 0 Q5 12 10 4 Q15 -4 20 8 Q25 20 30 0 Z' fill='%231a3d1d'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            background-size: 30px 12px;
         }
 
-        @media screen and (-webkit-min-device-pixel-ratio: 0) {
-            .header-fallback {
-                display: none;
-            }
+        .footer .salut {
+            font-family: 'Bebas Neue', Impact, Arial Black, sans-serif;
+            font-size: 30px;
+            letter-spacing: 5px;
+            color: #0e1f0f;
+            line-height: 1.1;
         }
 
+        .footer .salut-fire {
+            color: #c0410a;
+        }
+
+        .footer .footer-sub {
+            font-family: 'Special Elite', Georgia, serif;
+            font-size: 11px;
+            color: #4a6010;
+            margin-top: 6px;
+            letter-spacing: 1.5px;
+        }
+
+        /* ── MOBILE ── */
         @media (max-width: 600px) {
-            .container {
-                margin: 10px;
-                border-radius: 10px;
-            }
-
-            .content {
-                padding: 20px;
-            }
-
-            .header {
-                padding: 40px 15px;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .price {
-                font-size: 2em;
-            }
-
-            .info-table td {
-                display: block;
-                width: 100% !important;
-                border: none;
-                padding: 8px 15px;
-            }
-
-            .info-table td:first-child {
-                border-radius: 5px 5px 0 0;
-                border-left: 4px solid #ff6b35;
-            }
-
-            .info-table td:last-child {
-                background: #fff;
-                border-radius: 0 0 5px 5px;
-                border-left: 4px solid #ff6b35;
-                margin-bottom: 10px;
-            }
+            .wrapper { margin: 8px; }
+            .section, .payment-section, .dj-section, .legal { padding: 20px; }
+            .badge-row { padding: 14px 20px; }
+            .welcome-band { padding: 18px 20px; }
+            .price-amount { font-size: 70px; }
+            .price-section { padding: 24px 20px; }
+            .footer { padding: 18px 20px; }
+            .includes-cell { display: block; width: 100%; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Header con imagen de fondo -->
-    <div class="header">
-        <div class="header-content">
-            <h1>🎉 Correbars Esparreguera 2025 🎉</h1>
-            <div class="registration-id">Número Inscripció: #<?= regId ?></div>
-        </div>
+<div class="wrapper">
+
+    <!-- ── HEADER IMAGE ── -->
+    <!-- Substitueix la URL de la img per la imatge pujada al teu hosting (postimg, etc.) -->
+    <div class="header-img-wrap">
+        <img src="https://i.postimg.cc/LXpMX94W/header-correbars.jpg"
+             alt="Correbars 2026 – 23 de juny"
+             style="width:100%;max-width:620px;display:block;">
     </div>
 
-    <div class="content">
-        <!-- Sección de bienvenida -->
-        <div class="welcome-section">
-            <h2>Bones, <?= nombre ?>!</h2>
-            <p>La teva preinscripció al Correbars ha estat rebuda amb èxit! 🥳<br>
-                Et confirmem que formaràs part de la festa més bèstia de l'any!</p>
+    <div class="card">
+
+        <!-- ── WELCOME ── -->
+        <div class="welcome-band">
+            <div class="greeting">Benvingut/da al Correbars</div>
+            <div class="name"><?= nombre ?></div>
+            <div class="sub">La teva preinscripció ha estat rebuda amb èxit 🔥</div>
         </div>
 
-        <!-- Información de la inscripción usando tabla para mejor compatibilidad -->
-        <div class="info-section">
-            <h3>📋 Resum de la teva inscripció:</h3>
+        <!-- ── BADGE ROW ── -->
+        <div class="badge-row">
+            <div class="badge-left">
+                <div class="label">Número d'inscripció</div>
+                <div class="reg-id">#<?= regId ?></div>
+            </div>
+            <div class="badge-right">
+                <div class="anni">
+                    <strong>30è ANIVERSARI</strong>
+                    Diables d'Esparreguera<br>1996 – 2026
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ── RESUM INSCRIPCIÓ ── -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-header-left">
+                    <div class="section-title">RESUM INSCRIPCIÓ</div>
+                    <div class="section-line"></div>
+                </div>
+            </div>
             <table class="info-table">
                 <tr>
-                    <td>👕 Talla de samarreta:</td>
+                    <td>👕 Talla samarreta</td>
                     <td><?= talla ?></td>
                 </tr>
                 <tr>
-                    <td>🍃 Al·lèrgies o intoleràncies:</td>
+                    <td>🍃 Al·lèrgies</td>
                     <td><?= alergias ?></td>
                 </tr>
                 <tr>
-                    <td>🥪 Entrepà escollit:</td>
+                    <td>🥪 Entrepà</td>
                     <td><?= bocata ?></td>
                 </tr>
                 <tr>
-                    <td>🪪 DNI associat:</td>
+                    <td>🪪 DNI</td>
                     <td><?= dni ?></td>
                 </tr>
                 <tr>
-                    <td>📅 Data de la inscripció:</td>
+                    <td>📅 Data inscripció</td>
                     <td><?= data ?></td>
                 </tr>
             </table>
         </div>
 
-        <!-- Precio -->
+        <!-- ── L'ENTRADA INCLOU ── -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-header-left">
+                    <div class="section-title">L'ENTRADA INCLOU</div>
+                    <div class="section-line"></div>
+                </div>
+            </div>
+            <table class="includes-grid">
+                <tr>
+                    <td class="includes-cell">
+                        <div class="plus">+8</div>
+                        <div class="item-name">Consumicions</div>
+                        <div class="item-detail">Incloses a l'entrada</div>
+                    </td>
+                    <td class="includes-cell">
+                        <div class="plus">+1</div>
+                        <div class="item-name">Samarreta</div>
+                        <div class="item-detail">Edició especial 30è aniversari</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="includes-cell">
+                        <div class="plus">+1</div>
+                        <div class="item-name">Got reutilitzable</div>
+                        <div class="item-detail">Sostenibilitat 🌱</div>
+                    </td>
+                    <td class="includes-cell">
+                        <div class="plus">++</div>
+                        <div class="item-name">Regals &amp; sorpreses</div>
+                        <div class="item-detail">Ja veuràs… 🤫</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ── PREU ── -->
         <div class="price-section">
-            <h3>💸 Import a pagar</h3>
-            <div class="price"><?= preuFinal ?> €</div>
+            <div class="price-eyebrow">Import total a pagar</div>
+            <div class="price-amount"><sup>€</sup><?= preuFinal ?></div>
+            <div class="price-note">Únicament en efectiu · Cal presentar el DNI</div>
         </div>
 
-        <!-- Información de pago -->
-        <div class="payment-info">
-            <h3>📍 Informació de pagament</h3>
-            <p><strong>Lloc:</strong> Casal Popular Les Canyes (c/ Sant Miquel, nº37)</p>
-            <div class="payment-dates">
-                <p><strong>Dates i horaris:</strong></p>
-                <ul class="payment-list">
-                    <li>📅 Dimecres 11 de juny a les 19:30h</li>
-                    <li>📅 Dijous 12 de juny a les 19:30h</li>
-                </ul>
+        <!-- ── PAGAMENT ── -->
+        <div class="payment-section">
+            <div class="section-header">
+                <div class="section-header-left">
+                    <div class="section-title">ON I QUAN PAGAR</div>
+                    <div class="section-line"></div>
+                </div>
             </div>
+            <div class="payment-location">📍 Casal Popular Les Canyes · C/ Sant Miquel, nº37</div>
+            <table class="dates-table">
+                <tr class="date-row">
+                    <td><span class="day-icon">📅</span></td>
+                    <td>
+                        <div class="day-name">Dimecres</div>
+                        <div class="day-detail">3 de juny de 2026</div>
+                        <div class="day-time">De 19:00h a 21:00h</div>
+                    </td>
+                </tr>
+                <tr class="date-row">
+                    <td><span class="day-icon">📅</span></td>
+                    <td>
+                        <div class="day-name">Dijous</div>
+                        <div class="day-detail">5 de juny de 2026</div>
+                        <div class="day-time">De 19:00h a 21:00h</div>
+                    </td>
+                </tr>
+            </table>
             <div class="warning">
-                ⚠️ <strong>Important:</strong> Porta el teu DNI (o una imatge d'aquest) i paga en efectiu abans del <strong>15 de juny</strong>. Si no, la teva entrada es perdrà!
+                <p>⚠️ <strong>Important:</strong> Si no efectues el pagament abans del <strong>6 de juny</strong>, la teva entrada es posarà de nou a la venda. Porta el DNI (o una imatge) i paga en <strong>efectiu</strong>. Sense excepcions.</p>
             </div>
         </div>
 
-        <!-- Lo que incluye la entrada -->
-        <div class="includes-section">
-            <h3>🎁 L'entrada inclou:</h3>
-            <ul class="includes-list">
-                <li>🍹 6 combinats</li>
-                <li>🍷 2 sangries</li>
-                <li>👕 1 samarreta</li>
-                <li>🥤 1 got reutilitzable</li>
-                <li>🎊 ... i moltes sorpreses més!</li>
+        <!-- ── DJs ── -->
+        <div class="dj-section">
+            <div class="section-title" style="margin-bottom:14px;">MÚSICA</div>
+            <table class="dj-table">
+                <tr>
+                    <td class="dj-slot">21h → 1h</td>
+                    <td class="dj-bar"></td>
+                    <td class="dj-name">DJ Gobern's Brothers</td>
+                </tr>
+                <tr>
+                    <td class="dj-slot">1h → 3h</td>
+                    <td class="dj-bar"></td>
+                    <td class="dj-name">Ciscu Batilles</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ── LEGAL ── -->
+        <div class="legal">
+            <div class="legal-title">📜 Declaració responsable i autoritzacions</div>
+            <p><strong>Compromís de responsabilitat:</strong> Sóc major d'edat (18 anys o més) i em comprometo a seguir les normes i ordres establertes pels organitzadors del Correbars i la Colla de Diables d'Esparreguera (23 de juny de 2026, Antic Escorxador d'Esparreguera). L'organització té dret a expulsar-me si no compleixo les normes. <strong>No s'admetrà cap forma d'agressió ni actitud de merda.</strong></p>
+            <p><strong>Responsabilitat per danys:</strong> En cas de destrosses identificades, els responsables hauran de fer-se càrrec de les despeses de reparació.</p>
+            <p><strong>Autorització d'imatge:</strong> Autoritzo a la Colla de Diables d'Esparreguera a captar, enregistrar, usar, publicar i distribuir imatges meves pels seus canals, d'acord amb la llei orgànica 1/1982.</p>
+            <ul>
+                <li>L'aforament de l'acte està limitat</li>
+                <li>L'organització es reserva el dret d'admissió i permanència</li>
             </ul>
         </div>
-    </div>
 
-    <!-- Footer con términos legales -->
-    <div class="footer">
-        <h4>📜 DECLARACIÓ RESPONSABLE I AUTORITZACIONS</h4>
+        <!-- ── FOOTER ── -->
+        <div class="footer">
+            <div class="salut">
+                <span class="salut-fire">🔥</span> SALUT I FOC! <span class="salut-fire">🔥</span>
+            </div>
+            <div class="footer-sub">Ens veiem el 23 de juny · Antic Escorxador d'Esparreguera</div>
+        </div>
 
-        <p><strong>Compromís de responsabilitat:</strong><br>
-            Sóc major d'edat (major o igual a 18 anys), EM COMPROMETO a seguir les normes i ordres establertes pels organitzadors del Correbars i la Colla de Diables d'Esparreguera, que tindrà lloc el 23 i 24 de juny de 2025 a Esparreguera. Sóc conscient que l'organització té dret a expulsar-me de l'esdeveniment si no compleixo estrictament amb les normes.</p>
-
-        <p><strong>Responsabilitat per danys:</strong><br>
-            En el cas que hi hagi destrosses o desperfectes i se n'identifiqui els autors, aquests s'hauran de fer càrrec de les despeses de reparació.</p>
-
-        <p><strong>Autorització d'imatge:</strong><br>
-            AUTORITZO a la Colla de Diables d'Esparreguera el dret i permís per a captar, enregistrar, usar, publicar, i distribuir imatges meves, a través de qualsevol mitjà de comunicació de la nostra entitat, d'acord amb la llei orgànica 1/1982.</p>
-
-        <p><strong>ℹ️ Informació adicional:</strong></p>
-        <ul>
-            <li>L'aforament de l'acte està limitat a 500 persones</li>
-            <li>L'organització es reserva el dret d'admissió per mantenir un ambient segur i respectuós</li>
-            <li>No s'admetrà cap forma d'agressió</li>
-        </ul>
-    </div>
-
-    <!-- Mensaje final -->
-    <div class="final-message">
-        🔥 Salut i Foc! 🔥<br>
-        Ens veiem al Correbars 2025!
-    </div>
-</div>
+    </div><!-- /card -->
+</div><!-- /wrapper -->
 </body>
 </html>

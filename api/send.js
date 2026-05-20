@@ -219,6 +219,9 @@ export default async function handler(req, res) {
             .trim();
 
         // Configurar email con headers optimizados para adjuntos
+        // Use the actual sending domain for Message-ID so it passes spam filters
+        const senderDomain = OVH_USER.split('@')[1] || 'correbars.cat';
+
         const mailOptions = {
             from: {
                 name: 'Correbars Esparreguera',
@@ -226,6 +229,7 @@ export default async function handler(req, res) {
             },
             to,
             subject,
+            text: textContent,
             html: sanitizedHtml,
             attachments: emailAttachments,
             // Headers optimizados para adjuntos
@@ -241,7 +245,7 @@ export default async function handler(req, res) {
                 'MIME-Version': '1.0'
             },
             // Configuraciones adicionales
-            messageId: `<${Date.now()}.${Math.random().toString(36).substr(2, 9)}@esparreguera.correbars>`,
+            messageId: `<${Date.now()}.${Math.random().toString(36).substr(2, 9)}@${senderDomain}>`,
             date: new Date(),
             encoding: 'utf-8',
             // Configuraciones específicas para adjuntos grandes
