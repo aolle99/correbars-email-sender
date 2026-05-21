@@ -223,6 +223,10 @@ export default async function handler(req, res) {
                 name: 'Correbars Esparreguera',
                 address: OVH_USER
             },
+            replyTo: {
+                name: 'Correbars Esparreguera',
+                address: OVH_USER
+            },
             to,
             subject,
             text: textContent,
