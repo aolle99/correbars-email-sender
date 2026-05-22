@@ -61,9 +61,22 @@ function getOrCreateColumn(sheet, headerName) {
     return newCol;
 }
 
-/** Formata una data en format local. */
+/** Formata una data en format local.
+ *  Accepta tant objectes Date com strings en format dd/M/yyyy HH:mm:ss
+ *  (que és el que retorna e.namedValues de Google Forms).
+ */
 function formatDate(dateValue) {
-    const d = new Date(dateValue);
+    let d;
+    if (dateValue instanceof Date && !isNaN(dateValue)) {
+        // Ja és un objecte Date vàlid (p.ex. llegit directament d'una cel·la)
+        d = dateValue;
+    } else {
+        // String de namedValues: "22/5/2026 10:34:27" → parseig manual
+        // perquè new Date("dd/MM/yyyy") no funciona en V8/GAS
+        const m = String(dateValue).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})[\s,]+(\d{1,2}):(\d{2})/);
+        d = m ? new Date(+m[3], +m[2] - 1, +m[1], +m[4], +m[5]) : new Date();
+    }
+    if (isNaN(d.getTime())) d = new Date(); // fallback a ara mateix
     return Utilities.formatDate(d, Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm');
 }
 
@@ -72,7 +85,7 @@ function formatDate(dateValue) {
  * Tots els valors es passen com a strings nets.
  */
 function renderTemplate(data) {
-    const tpl      = HtmlService.createTemplateFromFile('TemplateReserva');
+    const tpl      = HtmlService.createTemplateFromFile('TemplateEmail');
     tpl.regId      = data.regId;
     tpl.nombre     = data.nombre;
     tpl.talla      = data.talla;

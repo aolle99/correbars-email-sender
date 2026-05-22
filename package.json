@@ -6,6 +6,7 @@
   "scripts": {
     "start": "vercel dev --listen 3000",
     "test": "node test/email-test.js",
+    "mail-tester": "node test/mail-tester.js",
     "dev": "vercel dev",
     "deploy": "vercel --prod"
   },
