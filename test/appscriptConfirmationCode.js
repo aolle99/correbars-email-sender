@@ -44,7 +44,12 @@ function sendViaVercel(to, subject, htmlBody, attachments = null) {
 
     const resp = UrlFetchApp.fetch(API_URL, options);
     if (resp.getResponseCode() !== 200) {
-        throw new Error('Error en Vercel: ' + resp.getContentText());
+        let errorMsg = resp.getContentText();
+        try {
+            const respJson = JSON.parse(errorMsg);
+            if (respJson.error) errorMsg = respJson.error;
+        } catch (_) {}
+        throw new Error('Error en Vercel: ' + errorMsg);
     }
 }
 
@@ -98,12 +103,14 @@ function enviarEntradas(e) {
 
                 // Intentar envío por Vercel
                 let envioExitoso = false;
+                let errorMsg = '';
                 try {
                     sendViaVercel(correo, subject, htmlBody, [pdf]);
                     envioExitoso = true;
                     Logger.log('Enviado correctamente por Vercel para: ' + nombre);
                 } catch (err) {
                     Logger.log('Falló envío Vercel: ' + err);
+                    errorMsg = err.message;
 
                     // Fallback a Gmail si falla Vercel
                     try {
@@ -115,9 +122,11 @@ function enviarEntradas(e) {
                             attachments: [pdf]
                         });
                         envioExitoso = true;
+                        errorMsg = '';
                         Logger.log('Enviado correctamente por Gmail para: ' + nombre);
                     } catch (gmailErr) {
                         Logger.log('También falló Gmail: ' + gmailErr);
+                        errorMsg += ' | Gmail: ' + gmailErr.message;
                     }
                 }
 
@@ -126,7 +135,7 @@ function enviarEntradas(e) {
                 sheet.getRange(row, 11).setValue(false);
 
                 // Registrar en hoja de "Envíos"
-                registrarEnvio(correo, regId, preuFinal, envioExitoso ? 'OK' : 'KO');
+                registrarEnvio(correo, regId, preuFinal, envioExitoso ? 'OK' : 'KO', errorMsg);
 
             } catch (error) {
                 Logger.log('Error general en envío: ' + error);
@@ -134,7 +143,7 @@ function enviarEntradas(e) {
                 sheet.getRange(row, 11).setValue(false);
 
                 // Registrar error en hoja de "Envíos"
-                registrarEnvio(correo, regId, preuFinal, 'ERROR');
+                registrarEnvio(correo, regId, preuFinal, 'ERROR', error.message);
             }
         }
     }
@@ -176,7 +185,7 @@ function crearPDF(nombre, numeroEntrada, bocata) {
 /**
  * Función para registrar envíos en la hoja de "Envíos"
  */
-function registrarEnvio(correo, regId, precio, estado) {
+function registrarEnvio(correo, regId, precio, estado, mensaje) {
     try {
         const enviosSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Envíos');
         if (enviosSheet) {
@@ -185,7 +194,8 @@ function registrarEnvio(correo, regId, precio, estado) {
                 correo,
                 regId,
                 precio + '€',
-                estado
+                estado,
+                mensaje || '',
             ]);
         }
     } catch (error) {

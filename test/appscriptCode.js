@@ -129,22 +129,30 @@ function sendViaVercel(to, subject, htmlBody) {
     const resp = UrlFetchApp.fetch(CONFIG.VERCEL_API_URL, options);
     const code = resp.getResponseCode();
     if (code !== 200) {
-        throw new Error(`Vercel resposta ${code}: ${resp.getContentText()}`);
+        let errorMsg = resp.getContentText();
+        try {
+            const respJson = JSON.parse(errorMsg);
+            if (respJson.error) errorMsg = respJson.error;
+        } catch (_) {}
+        throw new Error(`Vercel resposta ${code}: ${errorMsg}`);
     }
 }
 
 /**
  * Envia el correu amb fallback a GmailApp/MailApp.
- * Retorna true si s'ha enviat correctament per qualsevol via.
+ * Retorna { ok: boolean, errorMsg: string } amb el resultat i els errors acumulats.
  */
 function sendEmailWithFallback(to, subject, htmlBody) {
+    const errors = [];
+
     // Intent 1: Vercel
     try {
         sendViaVercel(to, subject, htmlBody);
         Logger.log('✅ Enviat via Vercel a: ' + to);
-        return true;
+        return { ok: true, errorMsg: '' };
     } catch (errVercel) {
         Logger.log('⚠️ Vercel fallat: ' + errVercel.message);
+        errors.push('Vercel: ' + errVercel.message);
     }
 
     // Intent 2: GmailApp
@@ -154,9 +162,10 @@ function sendEmailWithFallback(to, subject, htmlBody) {
             htmlBody: htmlBody,
         });
         Logger.log('✅ Enviat via GmailApp a: ' + to);
-        return true;
+        return { ok: true, errorMsg: '' };
     } catch (errGmail) {
         Logger.log('⚠️ GmailApp fallat: ' + errGmail.message);
+        errors.push('Gmail: ' + errGmail.message);
     }
 
     // Intent 3: MailApp (quota diferent)
@@ -168,16 +177,17 @@ function sendEmailWithFallback(to, subject, htmlBody) {
             htmlBody: htmlBody,
         });
         Logger.log('✅ Enviat via MailApp a: ' + to);
-        return true;
+        return { ok: true, errorMsg: '' };
     } catch (errMail) {
         Logger.log('❌ MailApp també fallat: ' + errMail.message);
+        errors.push('MailApp: ' + errMail.message);
     }
 
-    return false;
+    return { ok: false, errorMsg: errors.join(' | ') };
 }
 
 /** Escriu una entrada al full de registre d'enviaments. */
-function logToEnviosSheet(email, regId, preuFinal, status) {
+function logToEnviosSheet(email, regId, preuFinal, status, mensaje) {
     try {
         const ss          = SpreadsheetApp.getActiveSpreadsheet();
         const enviosSheet = ss.getSheetByName(CONFIG.LOG_SHEET_NAME);
@@ -191,6 +201,7 @@ function logToEnviosSheet(email, regId, preuFinal, status) {
             regId,
             preuFinal + '€',
             status,
+            mensaje || '',
         ]);
     } catch (err) {
         Logger.log('⚠️ Error escrivint al full Envíos: ' + err.message);
@@ -246,12 +257,12 @@ function onFormSubmit(e) {
     const subject = `${CONFIG.EMAIL_SUBJECT_PREFIX} #${newId}`;
 
     // ── 5) Envia el correu ───────────────────
-    const envioExitoso = sendEmailWithFallback(emailDest, subject, htmlBody);
-    const finalStatus  = envioExitoso ? 'OK' : 'ERROR_ENVIAMENT';
+    const result      = sendEmailWithFallback(emailDest, subject, htmlBody);
+    const finalStatus = result.ok ? 'OK' : 'ERROR_ENVIAMENT';
     sheet.getRange(row, statusCol).setValue(finalStatus);
 
     // ── 6) Log al full Envíos ────────────────
-    logToEnviosSheet(emailDest, newId, preuFinal, envioExitoso ? 'OK' : 'KO');
+    logToEnviosSheet(emailDest, newId, preuFinal, result.ok ? 'OK' : 'KO', result.errorMsg);
 
     Logger.log(`onFormSubmit finalitzat — ID: ${newId} | Email: ${emailDest} | Estat: ${finalStatus}`);
 }
@@ -299,16 +310,16 @@ function retryFailedEmail(e) {
         return;
     }
 
-    const subject        = `${CONFIG.EMAIL_SUBJECT_PREFIX} #${newId}`;
-    const envioExitoso   = sendEmailWithFallback(emailDest, subject, htmlBody);
-    const retryStatus    = envioExitoso ? 'RETRY_OK' : 'RETRY_KO';
+    const subject      = `${CONFIG.EMAIL_SUBJECT_PREFIX} #${newId}`;
+    const result       = sendEmailWithFallback(emailDest, subject, htmlBody);
+    const retryStatus  = result.ok ? 'RETRY_OK' : 'RETRY_KO';
 
     // Actualitza l'estat a la columna STATUS
     const statusCol = getOrCreateColumn(sheet, CONFIG.STATUS_COLUMN_HEADER);
     sheet.getRange(row, statusCol).setValue(retryStatus);
 
     // Log
-    logToEnviosSheet(emailDest, newId, preuFinal, retryStatus);
+    logToEnviosSheet(emailDest, newId, preuFinal, retryStatus, result.errorMsg);
     Logger.log(`retryFailedEmail — ID: ${newId} | Email: ${emailDest} | Estat: ${retryStatus}`);
 }
 
@@ -357,11 +368,11 @@ function retryAllFailed() {
             continue;
         }
 
-        const subject      = `${CONFIG.EMAIL_SUBJECT_PREFIX} #${regId}`;
-        const ok           = sendEmailWithFallback(emailDest, subject, htmlBody);
-        const newStatus    = ok ? 'RETRY_OK' : 'RETRY_KO';
+        const subject   = `${CONFIG.EMAIL_SUBJECT_PREFIX} #${regId}`;
+        const result    = sendEmailWithFallback(emailDest, subject, htmlBody);
+        const newStatus = result.ok ? 'RETRY_OK' : 'RETRY_KO';
         sheet.getRange(row, statusColIdx + 1).setValue(newStatus);
-        logToEnviosSheet(emailDest, regId, preuFinal, newStatus);
+        logToEnviosSheet(emailDest, regId, preuFinal, newStatus, result.errorMsg);
         retried++;
 
         // Pausa per evitar límits de quota
