@@ -4,12 +4,20 @@
     {
       "src": "api/send.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/send",
       "dest": "/api/send.js"
+    },
+    {
+      "src": "/(.*\\.(jpg|jpeg|png|gif|webp|svg|ico))",
+      "dest": "/public/$1"
     }
   ]
 }
