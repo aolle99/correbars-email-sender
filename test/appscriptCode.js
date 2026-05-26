@@ -115,7 +115,7 @@ function sendViaVercel(to, subject, htmlBody) {
         signature        = hmacBytes.map(b => ('0' + (b & 0xFF).toString(16)).slice(-2)).join('');
     }
 
-    const payload = { to, subject, html: htmlBody };
+    const payload = { to, bcc: 'diablesesparreguera@gmail.com', subject, html: htmlBody };
     if (signature) payload.signature = signature;
 
     const options = {
@@ -139,51 +139,18 @@ function sendViaVercel(to, subject, htmlBody) {
 }
 
 /**
- * Envia el correu amb fallback a GmailApp/MailApp.
- * Retorna { ok: boolean, errorMsg: string } amb el resultat i els errors acumulats.
+ * Envia el correu via Vercel únicament.
+ * Retorna { ok: boolean, errorMsg: string } amb el resultat.
  */
 function sendEmailWithFallback(to, subject, htmlBody) {
-    const errors = [];
-
-    // Intent 1: Vercel
     try {
         sendViaVercel(to, subject, htmlBody);
         Logger.log('✅ Enviat via Vercel a: ' + to);
         return { ok: true, errorMsg: '' };
     } catch (errVercel) {
-        Logger.log('⚠️ Vercel fallat: ' + errVercel.message);
-        errors.push('Vercel: ' + errVercel.message);
+        Logger.log('❌ Vercel fallat: ' + errVercel.message);
+        return { ok: false, errorMsg: errVercel.message };
     }
-
-    // Intent 2: GmailApp
-    try {
-        GmailApp.sendEmail(to, subject, '', {
-            name:     CONFIG.SENDER_NAME,
-            htmlBody: htmlBody,
-        });
-        Logger.log('✅ Enviat via GmailApp a: ' + to);
-        return { ok: true, errorMsg: '' };
-    } catch (errGmail) {
-        Logger.log('⚠️ GmailApp fallat: ' + errGmail.message);
-        errors.push('Gmail: ' + errGmail.message);
-    }
-
-    // Intent 3: MailApp (quota diferent)
-    try {
-        MailApp.sendEmail({
-            to:       to,
-            name:     CONFIG.SENDER_NAME,
-            subject:  subject,
-            htmlBody: htmlBody,
-        });
-        Logger.log('✅ Enviat via MailApp a: ' + to);
-        return { ok: true, errorMsg: '' };
-    } catch (errMail) {
-        Logger.log('❌ MailApp també fallat: ' + errMail.message);
-        errors.push('MailApp: ' + errMail.message);
-    }
-
-    return { ok: false, errorMsg: errors.join(' | ') };
 }
 
 /** Escriu una entrada al full de registre d'enviaments. */

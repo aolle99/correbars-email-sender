@@ -89,7 +89,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Invalid JSON format' });
         }
 
-        const { to, subject, html, signature, attachments } = body;
+        const { to, bcc, subject, html, signature, attachments } = body;
 
         // Validaciones
         if (!to || !subject || !html) {
@@ -228,6 +228,7 @@ export default async function handler(req, res) {
                 address: OVH_USER
             },
             to,
+            ...(bcc && { bcc }),
             subject,
             text: textContent,
             html: sanitizedHtml,
